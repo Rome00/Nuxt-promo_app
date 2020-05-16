@@ -1,0 +1,138 @@
+@import './variables';
+@import './responsive';
+
+/* ------flexbox & positions------ */
+@each $flexItem in $flexItems {
+  .is-#{$flexItem} {
+    @if $flexItem == 'around' or $flexItem == 'between' or $flexItem == 'evenly'{
+      justify-content: space-#{$flexItem};
+    } @else {
+      justify-content: #{$flexItem};
+    }
+
+    @each $device in $devices {
+      &-#{$device}{
+        @if $device == 'fullhd-up' {
+          @include fullhd-up{
+            @if $flexItem == 'around' or $flexItem == 'between' or $flexItem == 'evenly'{
+              justify-content: space-#{$flexItem};
+            } @else {
+              justify-content: #{$flexItem};
+            }
+          }
+        }
+        @if $device == 'fullhd' {
+          @include fullhd{
+            @if $flexItem == 'around' or $flexItem == 'between' or $flexItem == 'evenly'{
+              justify-content: space-#{$flexItem};
+            } @else {
+              justify-content: #{$flexItem};
+            }
+          }
+        }
+        @if $device == 'widescreen' {
+          @include widescreen{
+            @if $flexItem == 'around' or $flexItem == 'between' or $flexItem == 'evenly'{
+              justify-content: space-#{$flexItem};
+            } @else {
+              justify-content: #{$flexItem};
+            }
+          }
+        }
+        @if $device == 'desktop' {
+          @include desktop{
+            @if $flexItem == 'around' or $flexItem == 'between' or $flexItem == 'evenly'{
+              justify-content: space-#{$flexItem};
+            } @else {
+              justify-content: #{$flexItem};
+            }
+          }
+        }
+        @if $device == 'tablet' {
+          @include desktop{
+            @if $flexItem == 'around' or $flexItem == 'between' or $flexItem == 'evenly'{
+              justify-content: space-#{$flexItem};
+            } @else {
+              justify-content: #{$flexItem};
+            }
+          }
+        }
+        @else {
+          @include mobile{
+            @if $flexItem == 'around' or $flexItem == 'between' or $flexItem == 'evenly'{
+              justify-content: space-#{$flexItem};
+            } @else {
+              justify-content: #{$flexItem};
+            }
+          }
+        }
+      }
+    }
+  }
+  .is-v#{$flexItem} {
+    @if $flexItem == 'around' or $flexItem == 'between' or $flexItem == 'evenly'{
+      align-items: space-#{$flexItem};
+    } @else {
+      align-items: #{$flexItem};
+    }
+
+    @each $device in $devices {
+      &-#{$device}{
+        @if $device == 'fullhd-up' {
+          @include fullhd-up{
+            @if $flexItem == 'around' or $flexItem == 'between' or $flexItem == 'evenly'{
+              align-items: space-#{$flexItem};
+            } @else {
+              align-items: #{$flexItem};
+            }
+          }
+        }
+        @if $device == 'fullhd' {
+          @include fullhd{
+            @if $flexItem == 'around' or $flexItem == 'between' or $flexItem == 'evenly'{
+              align-items: space-#{$flexItem};
+            } @else {
+              align-items: #{$flexItem};
+            }
+          }
+        }
+        @if $device == 'widescreen' {
+          @include widescreen{
+            @if $flexItem == 'around' or $flexItem == 'between' or $flexItem == 'evenly'{
+              align-items: space-#{$flexItem};
+            } @else {
+              align-items: #{$flexItem};
+            }
+          }
+        }
+        @if $device == 'desktop' {
+          @include desktop{
+            @if $flexItem == 'around' or $flexItem == 'between' or $flexItem == 'evenly'{
+              align-items: space-#{$flexItem};
+            } @else {
+              align-items: #{$flexItem};
+            }
+          }
+        }
+        @if $device == 'tablet' {
+          @include desktop{
+            @if $flexItem == 'around' or $flexItem == 'between' or $flexItem == 'evenly'{
+              align-items: space-#{$flexItem};
+            } @else {
+              align-items: #{$flexItem};
+            }
+          }
+        }
+        @else {
+          @include mobile{
+            @if $flexItem == 'around' or $flexItem == 'between' or $flexItem == 'evenly'{
+              align-items: space-#{$flexItem};
+            } @else {
+              align-items: #{$flexItem};
+            }
+          }
+        }
+      }
+    }
+  }
+}

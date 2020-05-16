@@ -1,0 +1,13 @@
+$primary: #4bacff;
+$danger: #dc5222;
+$navbar-height: 4.5rem;
+$navbar-item-img-max-height: 2.5rem;
+
+@import '~bulma';
+.breadcrumb {
+    font-size: 1rem;
+    white-space: wrap !important;
+    li {
+      align-items: baseline;
+    }
+  }

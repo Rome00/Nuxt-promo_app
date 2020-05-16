@@ -1,0 +1,55 @@
+@import './variables';
+
+//generate margin & padding sizes with directions (rem  is-m-5)
+@each $space in $sizes {
+    @each $side in $positions {
+        .is-m#{str-slice($side, 0, 1)}-#{$space} {
+            margin-#{$side}: #{$space}rem !important;
+        }
+        .is-p#{str-slice($side, 0, 1)}-#{$space} {
+            padding-#{$side}: #{$space}rem !important;
+        }
+    }
+}
+
+//generate margin & padding sizes(size + 0.5 --- is-m-0-half) with directions (rem)
+@each $space in $sizes {
+    @each $side in $positions {
+        .is-m#{str-slice($side, 0, 1)}-#{$space}-half {
+            margin-#{$side}: #{$space}#{'.5rem'} !important;
+        }
+        .is-p#{str-slice($side, 0, 1)}-#{$space}-half {
+            padding-#{$side}: #{$space}#{'.5rem'} !important;
+        }
+    }
+}
+
+//generate margin & padding sizes(for 0.125 & 0.25) with directions (rem)
+@each $space in $smallSize {
+    @each $side in $positions {
+        .is-m#{str-slice($side, 0, 1)}-small#{$space} {
+            margin-#{$side}: #{'0.'}#{$space}rem !important;
+        }
+        .is-p#{str-slice($side, 0, 1)}-small#{$space} {
+            padding-#{$side}: #{'0.'}#{$space}rem !important;
+        }
+    }
+}
+
+//generate with in %
+@each $length in $width {
+    .is-#{$length} {
+        width: #{$length}#{'%'} !important;
+    }
+    .is-#{$length/10}5 {
+        width: #{$length/10}5#{'%'} !important;
+    }
+}
+
+//generate with in %
+@each $length in $width {
+    .is-v#{$length} {
+        height: #{$length}#{'%'} !important;
+    }
+}
+

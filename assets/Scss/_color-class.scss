@@ -1,0 +1,32 @@
+@import './color-variables';
+
+@each $color_name, $color in $colVariables {
+    @each $color_type, $color_value in $color {
+      @if $color_type == "base" {
+        .is-#{$color_name} {
+          background-color: $color_value !important;
+        }
+        .has-#{$color_name}-text {
+          color: $color_value !important;
+        }
+      }
+      @else if $color_name != "shades" {
+        .is-#{$color_name}.#{$color_type} {
+          background-color: $color_value !important;
+        }
+        .has-#{$color_name}-text.text-#{$color_type} {
+          color: $color_value !important;
+        }
+      }
+    }
+  }
+  
+  // Shade classes
+  @each $color, $color_value in $shades {
+    .#{$color} {
+      background-color: $color_value !important;
+    }
+    .#{$color}-text {
+      color: $color_value !important;
+    }
+  }

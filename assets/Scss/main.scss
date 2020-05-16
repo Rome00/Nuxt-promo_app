@@ -1,0 +1,16 @@
+
+
+@import 'bulma';
+@import './color-class';
+@import './responsive';
+@import './flexbox';
+@import './spacing';
+@import './sizing';
+
+.breadcrumb {
+    font-size: 1rem;
+    white-space: wrap !important;
+    li {
+      align-items: baseline;
+    }
+  }

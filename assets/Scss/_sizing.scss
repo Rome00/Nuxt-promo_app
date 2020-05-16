@@ -1,0 +1,8 @@
+@import './variables';
+
+// font size genetation
+@for $i from 1 to $maxFont {
+  .is-size-#{$i} {
+    font-size: #{$i}#{'rem'} !important;
+  }
+}
