@@ -9,7 +9,7 @@
             <figure class="avatar">
               <img src="https://via.placeholder.com/300" />
             </figure>
-            <form>
+            <form @submit.prevent="login">
               <div class="field">
                 <div class="control">
                   <input
@@ -25,9 +25,9 @@
                     <span v-if="!$v.form.email.required" class="help is-danger">
                       Email is required
                     </span>
-                    <span v-if="!$v.form.email.email" class="help is-danger"
-                      >Email address is not valid</span
-                    >
+                    <span v-if="!$v.form.email.email" class="help is-danger">
+                      Email address is not valid
+                    </span>
                   </div>
                 </div>
               </div>
@@ -55,15 +55,16 @@
               <button
                 class="button is-block is-info is-large is-fullwidth"
                 :disabled="$v.form.$invalid"
-                @click.prevent="login"
               >
                 Login
               </button>
             </form>
           </div>
           <p class="has-text-grey">
-            <a>Sign In With Google</a> &nbsp;·&nbsp;
-            <nuxt-link to="/register">Sign Up</nuxt-link> &nbsp;·&nbsp;
+            <a>Sign In With Google</a>
+            &nbsp;·&nbsp;
+            <nuxt-link to="/register">Sign Up</nuxt-link>
+            &nbsp;·&nbsp;
 
             <a href="../">Need Help?</a>
           </p>
@@ -77,6 +78,7 @@
 import { required, email } from 'vuelidate/lib/validators'
 
 export default {
+  middleware: 'guest',
   data() {
     return {
       form: {
@@ -96,11 +98,27 @@ export default {
       }
     }
   },
+  computed: {
+    isValid() {
+      return !this.$v.form.invalid
+    }
+  },
   methods: {
     login() {
       this.$v.form.$touch()
-      // eslint-disable-next-line no-console
-      console.log(this.form)
+      if (this.isValid) {
+        this.$store
+          .dispatch('auth/login', this.form)
+          .then(() => {
+            this.$router.push('/')
+          })
+          .catch(() => {
+            this.$toasted.error('Wrong email or password', {
+              position: 'bottom-right',
+              duration: 3000
+            })
+          })
+      }
     }
   }
 }

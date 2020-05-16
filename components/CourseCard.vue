@@ -29,9 +29,9 @@
       <nuxt-link :to="''" class="card-footer-item">
         Learn More
       </nuxt-link>
-      <a target="_" :href="course.prodactLink" class="card-footer-item"
-        >Enroll</a
-      >
+      <a target="_" :href="course.productLink" class="card-footer-item">
+        Enroll
+      </a>
     </footer>
   </div>
 </template>

@@ -9,7 +9,8 @@
             <figure class="avatar">
               <img src="https://via.placeholder.com/300" />
             </figure>
-            <form>
+            <form @submit.prevent="register">
+              <!-- userName input -->
               <div class="field">
                 <div class="control">
                   <input
@@ -20,10 +21,24 @@
                     @blur="$v.form.username.$touch()"
                   />
                   <div v-if="$v.form.username.$error" class="form-error">
-                    <span class="help is-danger">Username is required</span>
+                    <span
+                      v-if="!$v.form.username.required"
+                      class="help is-danger"
+                    >
+                      Username is required
+                    </span>
+                    <span
+                      v-if="!$v.form.username.minLength"
+                      class="help is-danger"
+                    >
+                      Username minimum length is 6 characters
+                    </span>
                   </div>
                 </div>
               </div>
+              <!-- userName input -->
+
+              <!-- Name input -->
               <div class="field">
                 <div class="control">
                   <input
@@ -34,10 +49,18 @@
                     @blur="$v.form.name.$touch()"
                   />
                   <div v-if="$v.form.name.$error" class="form-error">
-                    <span class="help is-danger">Name is required</span>
+                    <span v-if="!$v.form.name.required" class="help is-danger">
+                      Name is required
+                    </span>
+                    <span v-if="!$v.form.name.minLength" class="help is-danger">
+                      Name minimum length is 6 characters
+                    </span>
                   </div>
                 </div>
               </div>
+              <!-- Name input -->
+
+              <!-- Email input -->
               <div class="field">
                 <div class="control">
                   <input
@@ -57,6 +80,9 @@
                   </div>
                 </div>
               </div>
+              <!-- Email input -->
+
+              <!-- Avatar input -->
               <div class="field">
                 <div class="control">
                   <input
@@ -65,15 +91,24 @@
                     type="text"
                     placeholder="Avatar"
                     autocomplete
+                    @blur="$v.form.avatar.$touch()"
                   />
                   <div v-if="$v.form.avatar.$error" class="form-error">
-                    <span v-if="$v.form.avatar.url" class="help is-danger">
+                    <span v-if="!$v.form.avatar.url" class="help is-danger">
                       Url format is not valid!
                     </span>
-                    <!-- <span class="help is-danger">Selected file type is not valid!</span> -->
+                    <span
+                      v-if="!$v.form.avatar.supportedFileType"
+                      class="help is-danger"
+                    >
+                      Selected file type is not valid!
+                    </span>
                   </div>
                 </div>
               </div>
+              <!-- Avatar input -->
+
+              <!-- Password input -->
               <div class="field">
                 <div class="control">
                   <input
@@ -100,6 +135,9 @@
                   </div>
                 </div>
               </div>
+              <!-- Password input -->
+
+              <!-- PasswordConfirm input -->
               <div class="field">
                 <div class="control">
                   <input
@@ -129,10 +167,12 @@
                   </div>
                 </div>
               </div>
+              <!-- PasswordConfirm input -->
+
               <button
                 type="submit"
                 class="button is-block is-info is-large is-fullwidth"
-                @click="() => {}"
+                :disabled="$v.form.$invalid"
               >
                 Register
               </button>
@@ -156,11 +196,12 @@ import {
   email,
   sameAs,
   minLength,
-  url,
-} from "vuelidate/lib/validators"
-import { supportedFileType } from "@/helpers/validator.js"
+  url
+} from 'vuelidate/lib/validators'
+import { supportedFileType } from '@/helpers/validator.js'
 
 export default {
+  middleware: 'guest',
   data() {
     return {
       form: {
@@ -168,43 +209,61 @@ export default {
         name: null,
         email: null,
         password: null,
-        passwordConfirmation: null,
-      },
+        passwordConfirmation: null
+      }
+    }
+  },
+  computed: {
+    isValid() {
+      return !this.$v.form.invalid
     }
   },
   methods: {
     register() {
       this.$v.form.$touch()
-    },
+      if (this.isValid) {
+        this.$store
+          .dispatch('auth/registerUser', this.form)
+          .then(() => {
+            this.$router.push({ name: 'login' })
+          })
+          .catch(error => {
+            this.$toasted.error(error, {
+              duration: 3000,
+              position: 'bottom-right'
+            })
+          })
+      }
+    }
   },
   validations: {
     form: {
       username: {
         required,
-        minLength: minLength(6),
+        minLength: minLength(4)
       },
       name: {
         required,
-        minLength: minLength(6),
+        minLength: minLength(2)
       },
       avatar: {
         url,
-        supportedFileType,
+        supportedFileType
       },
       email: {
         email,
-        required,
+        required
       },
       password: {
         required,
-        minLength: minLength(6),
+        minLength: minLength(6)
       },
       passwordConfirmation: {
         required,
-        sameAsPassword: sameAs("password"),
-      },
-    },
-  },
+        sameAsPassword: sameAs('password')
+      }
+    }
+  }
 }
 </script>
 <style scoped>
