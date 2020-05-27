@@ -1,5 +1,5 @@
-const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
+const mongoose = require('mongoose')
+const Schema = mongoose.Schema
 
 const productSchema = new Schema({
   slug: { type: String, unique: true, sparse: true },
@@ -9,8 +9,8 @@ const productSchema = new Schema({
   description: String,
   rating: Number,
   // what students learn
-  wsl: [{type: Schema.Types.Mixed, value: String}],
-  requirements: [{type: Schema.Types.Mixed, value: String}],
+  wsl: [{ type: Schema.Types.Mixed, value: String }],
+  requirements: [{ type: Schema.Types.Mixed, value: String }],
   promoVideoLink: String,
   productLink: String,
   price: Number,
@@ -24,6 +24,6 @@ const productSchema = new Schema({
   updatedAt: { type: Date, default: Date.now },
   category: { type: Schema.Types.ObjectId, ref: 'Category' },
   author: { type: Schema.Types.ObjectId, ref: 'User' }
-});
+})
 
-module.exports = mongoose.model('Product', productSchema );
+module.exports = mongoose.model('Product', productSchema)

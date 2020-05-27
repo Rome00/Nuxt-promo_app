@@ -1,8 +1,11 @@
+// Main db Files
+
 const mongoose = require('mongoose')
 const session = require('express-session')
 const MongoDBStore = require('connect-mongodb-session')(session)
 const keys = require('../keys')
 
+// Including all modules
 require('../models/user')
 require('../models/product')
 require('../models/category')

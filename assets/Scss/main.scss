@@ -1,16 +1,10 @@
-
-
+@import "./variables";
 @import 'bulma';
+@import './instructor_header';
+@import "./editor/index";
+@import './sizing';
 @import './color-class';
 @import './responsive';
 @import './flexbox';
 @import './spacing';
-@import './sizing';
-
-.breadcrumb {
-    font-size: 1rem;
-    white-space: wrap !important;
-    li {
-      align-items: baseline;
-    }
-  }
+@import './instructor_header';

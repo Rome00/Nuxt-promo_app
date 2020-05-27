@@ -2,7 +2,7 @@ export const state = () => ({
   courses: []
 })
 export const getters = {
-  getCourses: state => {
+  getCourses(state) {
     return state.courses.items
   }
 }

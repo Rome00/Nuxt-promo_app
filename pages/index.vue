@@ -6,8 +6,12 @@
     <section class="section">
       <div class="container">
         <h1 class="title">Featured Courses</h1>
-        <div v-for="course in courses" :key="course._id" class="columns">
-          <div class="column is-one-quarter">
+        <div class="columns">
+          <div
+            v-for="course in courses"
+            :key="course._id"
+            class="column is-one-quarter"
+          >
             <!-- CARD-ITEM -->
             <course-card :course="course" />
             <!-- CARD-ITEM-END -->

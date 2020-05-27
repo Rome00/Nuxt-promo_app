@@ -1,15 +1,22 @@
 <template>
   <div class="instructor-page">
+    <instructor-header exit-link="/" />
     <div class="centered">
       <div class="columns">
         <!-- Go to /instructor/courses -->
-        <div class="box" @click="() => {}">
+        <div
+          class="box"
+          @click="() => $router.push({ name: 'instructor-courses' })"
+        >
           <div>
             Courses
           </div>
         </div>
         <!-- Go to /instructor/blogs -->
-        <div class="box" @click="() => {}">
+        <div
+          class="box"
+          @click="() => $router.push({ name: 'instructor-blogs' })"
+        >
           <div>
             Blogs
           </div>
@@ -27,8 +34,13 @@
 </template>
 
 <script>
+import InstructorHeader from '@/components/shared/Header'
+
 export default {
-  middleware: 'admin'
+  layout: 'instructor',
+  components: {
+    InstructorHeader
+  }
 }
 </script>
 

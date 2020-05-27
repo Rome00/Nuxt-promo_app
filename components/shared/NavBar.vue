@@ -25,7 +25,7 @@
       <div class="navbar-start">
         <nuxt-link :to="{ name: 'index' }" class="navbar-item">Home</nuxt-link>
         <nuxt-link to="#" class="navbar-item">Courses</nuxt-link>
-        <nuxt-link to="#" class="navbar-item">Blogs</nuxt-link>
+        <nuxt-link :to="{ name: 'blogs' }" class="navbar-item">Blogs</nuxt-link>
         <nuxt-link to="#" class="navbar-item">About</nuxt-link>
         <nuxt-link to="#" class="navbar-item">Cv</nuxt-link>
       </div>
@@ -45,7 +45,7 @@
               <button
                 v-if="isAdmin"
                 class="button is-link is-outlined"
-                @click="() => {}"
+                @click="() => $router.push({ name: 'instructor' })"
               >
                 Instructor
               </button>
