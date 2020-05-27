@@ -14,7 +14,8 @@ module.exports = {
         content: process.env.npm_package_description || ''
       }
     ],
-    link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }]
+    link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
+    script: [{ src: 'https://kit.fontawesome.com/f43178f547.js' }]
   },
   /*
    ** Customize the progress-bar color
