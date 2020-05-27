@@ -46,6 +46,13 @@
       </button>
       <button
         class="menububble__button"
+        :class="{ 'is-active': isActive.paragraph() }"
+        @click="commands.paragraph()"
+      >
+        <icon name="paragraph" size="small" />
+      </button>
+      <button
+        class="menububble__button"
         :class="{ 'is-active': isActive.heading({ level: 1 }) }"
         @click="commands.heading({ level: 1 })"
       >

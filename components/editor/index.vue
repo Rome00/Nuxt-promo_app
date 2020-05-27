@@ -1,8 +1,16 @@
 <template>
   <div class="editor editor-squished">
-    <basic-menu :editor="editor" />
-    <bubble-menu :editor="editor" />
-    <editor-content class="editor__content" :editor="editor" />
+    <div class="card">
+      <basic-menu :editor="editor">
+        <template #saveButton>
+          <button class="button is-success button-save" @click="emitUpdate">
+            Save
+          </button>
+        </template>
+      </basic-menu>
+      <bubble-menu :editor="editor" />
+      <editor-content class="editor__content card-content" :editor="editor" />
+    </div>
   </div>
 </template>
 
@@ -17,10 +25,21 @@ import {
   Underline,
   History,
   Blockquote,
-  HorizontalRule
+  HorizontalRule,
+  OrderedList,
+  BulletList,
+  ListItem,
+  CodeBlockHighlight,
+  Placeholder
 } from 'tiptap-extensions'
+import javascript from 'highlight.js/lib/languages/javascript'
+import css from 'highlight.js/lib/languages/css'
 import BasicMenu from '@/components/editor/BasicMenu'
-import BubbleMenu from '~/components/editor/BubbleMenu'
+import BubbleMenu from '@/components/editor/BubbleMenu'
+
+import Title from '@/components/editor/components/Title'
+import Subtitle from '@/components/editor/components/Subtitle'
+import Doc from '@/components/editor/components/Doc'
 
 export default {
   components: {
@@ -43,13 +62,71 @@ export default {
         new Italic(),
         new Strike(),
         new Underline(),
-        new History()
+        new History(),
+        new Blockquote(),
+        new HorizontalRule(),
+        new OrderedList(),
+        new BulletList(),
+        new ListItem(),
+        new CodeBlockHighlight({
+          languages: {
+            javascript,
+            css
+          }
+        }),
+        new Doc(),
+        new Title(),
+        new Subtitle(),
+        new Placeholder({
+          showOnlyCurrent: false,
+          emptyNodeText: node => {
+            if (node.type.name === 'title') {
+              return 'Inspirational Title'
+            }
+            if (node.type.name === 'subtitle') {
+              return 'Some catchy subtitle'
+            }
+            return 'Write your story...'
+          }
+        })
       ]
     })
+    this.$emit('editorMounted', this.setInitialContent)
   },
   beforeDestroy() {
     // Always destroy your editor instance when it's no longer needed
     this.editor && this.editor.destroy()
+  },
+  methods: {
+    emitUpdate() {
+      const html = this.editor.getHTML()
+      const title = this.getNodeValueByName('title')
+      const subtitle = this.getNodeValueByName('subtitle')
+      this.$emit('editorUpdated', { content: html, title, subtitle })
+    },
+    getNodeValueByName(name) {
+      const docContent = this.editor.state.doc.content
+      const nodes = docContent.content
+      const node = nodes.find(n => n.type.name === name)
+      if (!node) return ''
+      return node.textContent
+    },
+    setInitialContent(content) {
+      this.editor.setContent(content)
+    }
   }
 }
 </script>
+
+<style scoped lang="scss">
+.button-save {
+  float: right;
+  background-color: #23d160;
+  &:hover {
+    background-color: #2bc76c;
+  }
+  &:disabled {
+    cursor: not-allowed;
+  }
+}
+</style>

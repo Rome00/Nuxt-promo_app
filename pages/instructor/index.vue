@@ -1,6 +1,6 @@
 <template>
   <div class="instructor-page">
-    <instructor-header exit-link="/" />
+    <header-instructor exit-link="/" />
     <div class="centered">
       <div class="columns">
         <!-- Go to /instructor/courses -->
@@ -34,12 +34,12 @@
 </template>
 
 <script>
-import InstructorHeader from '@/components/shared/Header'
+import HeaderInstructor from '@/components/shared/Header'
 
 export default {
   layout: 'instructor',
   components: {
-    InstructorHeader
+    HeaderInstructor
   }
 }
 </script>
