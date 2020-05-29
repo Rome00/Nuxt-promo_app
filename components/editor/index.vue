@@ -1,16 +1,18 @@
 <template>
-  <div class="editor editor-squished">
-    <div class="card">
-      <basic-menu :editor="editor">
-        <template #saveButton>
-          <button class="button is-success button-save" @click="emitUpdate">
-            Save
-          </button>
-        </template>
-      </basic-menu>
-      <bubble-menu :editor="editor" />
-      <editor-content class="editor__content card-content" :editor="editor" />
-    </div>
+  <div class="editor editor-squished card">
+    <basic-menu :editor="editor">
+      <template #saveButton>
+        <button
+          :disabled="isSaving"
+          class="button is-success button-save"
+          @click="emitUpdate"
+        >
+          Save
+        </button>
+      </template>
+    </basic-menu>
+    <bubble-menu :editor="editor" />
+    <editor-content class="editor__content card-content" :editor="editor" />
   </div>
 </template>
 
@@ -34,18 +36,22 @@ import {
 } from 'tiptap-extensions'
 import javascript from 'highlight.js/lib/languages/javascript'
 import css from 'highlight.js/lib/languages/css'
-import BasicMenu from '@/components/editor/BasicMenu'
 import BubbleMenu from '@/components/editor/BubbleMenu'
-
+import BasicMenu from '@/components/editor/BasicMenu'
 import Title from '@/components/editor/components/Title'
 import Subtitle from '@/components/editor/components/Subtitle'
 import Doc from '@/components/editor/components/Doc'
-
 export default {
   components: {
     EditorContent,
     BubbleMenu,
     BasicMenu
+  },
+  props: {
+    isSaving: {
+      type: Boolean,
+      default: false
+    }
   },
   data() {
     return {
@@ -56,6 +62,21 @@ export default {
   mounted() {
     this.editor = new Editor({
       extensions: [
+        new Doc(),
+        new Title(),
+        new Subtitle(),
+        new Placeholder({
+          showOnlyCurrent: false,
+          emptyNodeText: node => {
+            if (node.type.name === 'title') {
+              return 'Inspirational Title'
+            }
+            if (node.type.name === 'subtitle') {
+              return 'Some catchy subtitle'
+            }
+            return 'Write your story...'
+          }
+        }),
         new Heading({ levels: [1, 2, 3] }),
         new Bold(),
         new Code(),
@@ -73,24 +94,10 @@ export default {
             javascript,
             css
           }
-        }),
-        new Doc(),
-        new Title(),
-        new Subtitle(),
-        new Placeholder({
-          showOnlyCurrent: false,
-          emptyNodeText: node => {
-            if (node.type.name === 'title') {
-              return 'Inspirational Title'
-            }
-            if (node.type.name === 'subtitle') {
-              return 'Some catchy subtitle'
-            }
-            return 'Write your story...'
-          }
         })
       ]
     })
+    // this.$emit('editorMounted', this.editor)
     this.$emit('editorMounted', this.setInitialContent)
   },
   beforeDestroy() {

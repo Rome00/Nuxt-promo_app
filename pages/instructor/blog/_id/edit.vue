@@ -5,18 +5,18 @@
       <!-- TODO: Check if blog status is active -->
       <template #actionMenu>
         <div class="full-page-takeover-header-button">
-          <!-- TODO: Check blog validity before publishing -->
           <Modal
+            title="Review Details"
             open-title="Publish"
             open-btn-class="button is-success is-medium is-inverted is-outlined"
-            title="Review Details"
+            @opened="checkBlogValidity"
           >
             <div>
               <div class="title">
                 Once you publish blog you cannot change url to a blog.
               </div>
               <!-- Check for error -->
-              <div>
+              <div v-if="!publishError">
                 <div class="subtitle">Current Url is:</div>
                 <article class="message is-success">
                   <div class="message-body">
@@ -25,11 +25,11 @@
                   </div>
                 </article>
               </div>
-              <!-- <article class="message is-danger">
+              <article v-else class="message is-danger">
                 <div class="message-body">
-                  Display error here
+                  {{ publishError }}
                 </div>
-              </article> -->
+              </article>
             </div>
           </Modal>
         </div>
@@ -49,7 +49,12 @@
     </Header>
     <div class="blog-editor-container">
       <div class="container">
-        <editor @editorMounted="initBlogContent" />
+        <editor
+          ref="editor"
+          :is-saving="isSaving"
+          @editorMounted="initBlogContent"
+          @editorUpdated="updateBlog"
+        />
       </div>
     </div>
   </div>
@@ -66,25 +71,56 @@ export default {
     Header,
     Modal
   },
-  async fetch({ params, store }) {
-    await store.dispatch('instructor/blog/fetchBlogById', params.id)
+  data() {
+    return {
+      publishError: ''
+    }
   },
   computed: {
     ...mapState({
-      blog: ({ instructor }) => instructor.blog.item
+      blog: ({ instructor }) => instructor.blog.item,
+      isSaving: ({ instructor }) => instructor.blog.isSaving
     })
   },
+  async fetch({ params, store }) {
+    await store.dispatch('instructor/blog/fetchBlogById', params.id)
+  },
   methods: {
-    // initBlogContent(editor) {
-    //   if (this.blog && this.blog.content) {
-    //     editor.setContent(this.blog.content)
-    //   }
-    // }
     // TODO: fix color scheme of code block in editor!
     initBlogContent(initContent) {
-      debugger
       if (this.blog && this.blog.content) {
         initContent(this.blog.content)
+      }
+    },
+    updateBlog(blogData) {
+      if (!this.isSaving) {
+        this.$store
+          .dispatch('instructor/blog/updateBlog', {
+            data: blogData,
+            id: this.blog._id
+          })
+          .then(_ =>
+            this.$toasted.success('Blog Updated!', {
+              duration: 2000,
+              position: 'top-right'
+            })
+          )
+          .catch(_ =>
+            this.$toasted.error('Blog cannot be saved!', {
+              duration: 2000,
+              position: 'top-right'
+            })
+          )
+      }
+    },
+    checkBlogValidity() {
+      const title = this.$refs.editor.getNodeValueByName('title')
+      this.publishError = ''
+      if (title && title.length > 24) {
+        // create slug from title
+      } else {
+        this.publishError =
+          'Cannot publish! Title needs to be longer than 24 characters!'
       }
     }
   }
