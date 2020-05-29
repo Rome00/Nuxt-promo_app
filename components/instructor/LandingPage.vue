@@ -62,7 +62,7 @@
         <div class="field">
           <label class="label">Course Image</label>
           <div class="columns">
-            <div class="column">
+            <div v-show="course.image" class="column">
               <figure class="image is-4by2">
                 <img :src="course.image" />
               </figure>

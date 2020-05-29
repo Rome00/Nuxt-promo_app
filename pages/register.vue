@@ -7,7 +7,8 @@
           <p class="subtitle has-text-grey">Please register to proceed.</p>
           <div class="box">
             <figure class="avatar">
-              <img src="https://via.placeholder.com/300" />
+              <img v-if="form.avatar" :src="form.avatar" />
+              <img v-else src="https://via.placeholder.com/300" />
             </figure>
             <form @submit.prevent="register">
               <!-- userName input -->
@@ -209,24 +210,24 @@ export default {
         name: null,
         email: null,
         password: null,
-        passwordConfirmation: null
+        passwordConfirmation: null,
+        avatar: null
       }
     }
   },
   computed: {
     isValid() {
-      return !this.$v.form.invalid
+      return !this.$v.form.$invalid
     }
   },
   methods: {
     register() {
       this.$v.form.$touch()
+      console.log(this.isValid)
       if (this.isValid) {
         this.$store
           .dispatch('auth/registerUser', this.form)
-          .then(() => {
-            this.$router.push({ name: 'login' })
-          })
+          .then(_ => this.$router.push({ name: 'login' }))
           .catch(error => {
             this.$toasted.error(error, {
               duration: 3000,
