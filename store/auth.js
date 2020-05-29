@@ -52,6 +52,7 @@ export const actions = {
   },
   // Register user
   registerUser(_, registerData) {
+    debugger
     return this.$axios
       .$post('/api/v1/users/register', registerData)
       .catch(error => {

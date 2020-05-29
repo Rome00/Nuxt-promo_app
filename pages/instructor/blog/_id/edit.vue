@@ -3,13 +3,14 @@
   <div>
     <Header title="Write your blog" exit-link="/instructor/blogs">
       <!-- TODO: Check if blog status is active -->
-      <template #actionMenu>
+      <template v-if="blog.status === 'active'" #actionMenu>
         <div class="full-page-takeover-header-button">
           <Modal
             title="Review Details"
             open-title="Publish"
             open-btn-class="button is-success is-medium is-inverted is-outlined"
             @opened="checkBlogValidity"
+            @submitted="updateBlogStatus($event, 'published')"
           >
             <div>
               <div class="title">
@@ -17,11 +18,12 @@
               </div>
               <!-- Check for error -->
               <div v-if="!publishError">
-                <div class="subtitle">Current Url is:</div>
+                <div class="subtitle">
+                  This will be your blog's url after publish:
+                </div>
                 <article class="message is-success">
                   <div class="message-body">
-                    <!-- Get here actual slug -->
-                    <strong>some-slug</strong>
+                    <strong>{{ getBlogUrl() }}/blogs/{{ slug }}</strong>
                   </div>
                 </article>
               </div>
@@ -34,18 +36,22 @@
           </Modal>
         </div>
       </template>
-      <!-- <template v-else #actionMenu>
+      <template v-else #actionMenu>
         <div class="full-page-takeover-header-button">
           <Modal
-            openTitle="Unpublish"
-            openBtnClass="button is-success is-medium is-inverted is-outlined"
-            title="Unpublish Blog">
+            open-title="Unpublish"
+            open-btn-class="button is-success is-medium is-inverted is-outlined"
+            title="Unpublish Blog"
+            @submitted="updateBlogStatus($event, 'active')"
+          >
             <div>
-              <div class="title">Unpublish blog so it's no longer displayed in blogs page</div>
+              <div class="title">
+                Unpublish blog so it's no longer displayed in blogs page
+              </div>
             </div>
           </Modal>
         </div>
-      </template> -->
+      </template>
     </Header>
     <div class="blog-editor-container">
       <div class="container">
@@ -61,6 +67,7 @@
 </template>
 <script>
 import { mapState } from 'vuex'
+import slagify from 'slugify'
 import Editor from '~/components/editor'
 import Header from '~/components/shared/Header'
 import Modal from '~/components/shared/Modal'
@@ -71,9 +78,13 @@ export default {
     Header,
     Modal
   },
+  async fetch({ params, store }) {
+    await store.dispatch('instructor/blog/fetchBlogById', params.id)
+  },
   data() {
     return {
-      publishError: ''
+      publishError: '',
+      slug: ''
     }
   },
   computed: {
@@ -81,9 +92,6 @@ export default {
       blog: ({ instructor }) => instructor.blog.item,
       isSaving: ({ instructor }) => instructor.blog.isSaving
     })
-  },
-  async fetch({ params, store }) {
-    await store.dispatch('instructor/blog/fetchBlogById', params.id)
   },
   methods: {
     // TODO: fix color scheme of code block in editor!
@@ -102,13 +110,13 @@ export default {
           .then(_ =>
             this.$toasted.success('Blog Updated!', {
               duration: 2000,
-              position: 'top-right'
+              position: 'bottom-right'
             })
           )
           .catch(_ =>
             this.$toasted.error('Blog cannot be saved!', {
               duration: 2000,
-              position: 'top-right'
+              position: 'bottom-right'
             })
           )
       }
@@ -116,12 +124,52 @@ export default {
     checkBlogValidity() {
       const title = this.$refs.editor.getNodeValueByName('title')
       this.publishError = ''
-      if (title && title.length > 24) {
+      this.slug = ''
+      if (title && title.length > 15) {
         // create slug from title
+        this.slug = this.slugify(title)
       } else {
         this.publishError =
           'Cannot publish! Title needs to be longer than 24 characters!'
       }
+    },
+    getBlogUrl() {
+      return process.client && window.location.origin
+    },
+    slugify(text) {
+      return slagify(text, {
+        replacement: '-',
+        remove: null,
+        lower: true
+      })
+    },
+    updateBlogStatus({ closeModal }, status) {
+      const blogContent = this.$refs.editor.getContent()
+      blogContent.status = status
+
+      const message =
+        status === 'published'
+          ? 'Blog has been successfully published'
+          : 'Blog has been successfully unpublished'
+      this.$store
+        .dispatch('instructor/blog/updateBlog', {
+          data: blogContent,
+          id: this.blog._id
+        })
+        .then(_ => {
+          this.$toasted.success(message, {
+            duration: 3000,
+            position: 'bottom-right'
+          })
+          closeModal()
+        })
+        .catch(_ => {
+          this.$toasted.error('Blog cannot be published', {
+            duration: 3000,
+            position: 'bottom-right'
+          })
+          closeModal()
+        })
     }
   }
 }

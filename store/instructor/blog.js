@@ -1,4 +1,8 @@
 export const state = () => ({
+  items: {
+    drafts: [],
+    published: []
+  },
   item: {},
   isActive: false
 })
@@ -6,6 +10,9 @@ export const state = () => ({
 export const mutations = {
   SET_BLOG: (state, blog) => {
     state.item = blog
+  },
+  SET_BLOGS(state, { recourses, items }) {
+    state.items[recourses] = items
   },
   SET_IS_ACTIVE: (state, isActive) => {
     state.isActive = isActive
@@ -24,6 +31,13 @@ export const actions = {
       .$get(`/api/v1/blogs/${blogId}`)
       .then(blog => commit('SET_BLOG', blog))
   },
+  fetchUserBlogs({ commit }) {
+    return this.$axios.$get('/api/v1/blogs/me').then(blogs => {
+      const { published, drafts } = separateBlogs(blogs)
+      commit('SET_BLOGS', { recourses: 'drafts', items: drafts })
+      commit('SET_BLOGS', { recourses: 'published', items: published })
+    })
+  },
   updateBlog({ commit }, { data, id }) {
     commit('SET_IS_ACTIVE', true)
     return this.$axios
@@ -37,4 +51,13 @@ export const actions = {
         return Promise.reject(err)
       })
   }
+}
+
+function separateBlogs(blogs) {
+  const published = []
+  const drafts = []
+  blogs.forEach(blog => {
+    blog.status === 'published' ? published.push(blog) : drafts.push(blog)
+  })
+  return { published, drafts }
 }

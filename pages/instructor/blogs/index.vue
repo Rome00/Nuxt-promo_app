@@ -17,37 +17,88 @@
           </div>
           <div class="tabs">
             <ul>
-              <li><a>Drafts</a></li>
-              <li><a>Published</a></li>
+              <li @click="blogKey = 0">
+                <a
+                  class="has-amber-text text-lighten-1"
+                  :class="{ 'is-active': blogKey === 0 }"
+                >
+                  Drafts
+                </a>
+              </li>
+              <li @click="blogKey = 1">
+                <a
+                  class="has-green-text text-lighten-1"
+                  :class="{ 'is-active': blogKey === 1 }"
+                >
+                  Published
+                </a>
+              </li>
             </ul>
           </div>
           <div class="blogs-container">
-            <template>
-              <div>
-                <div class="blog-card">
-                  <h2>Some Title</h2>
-                  <div class="blog-card-footer">
-                    <span>
-                      Last Edited 17th December, 2018
-                    </span>
-                    <!-- Dropdown with menu here -->
+            <transition
+              mode="out-in"
+              :css="false"
+              @before-enter="beforeEnter"
+              @enter="enter"
+              @before-leave="beforeLeave"
+              @leave="leave"
+            >
+              <template v-if="blogKey === 0">
+                <div v-if="blogs.drafts && blogs.drafts.length > 0" key="0">
+                  <div
+                    v-for="blog in blogs.drafts"
+                    :key="blog._id"
+                    class="blog-card"
+                  >
+                    <h2>{{ blog.title }}</h2>
+                    <div class="blog-card-footer">
+                      <span>
+                        Last Edited:
+                        <span class="has-grey-text">
+                          {{ blog.updatedAt | date('llll') }}
+                        </span>
+                      </span>
+                      <drop-down
+                        :items="draftOptions"
+                        @optionChanged="handelOption($event, blog._id)"
+                      />
+                    </div>
                   </div>
                 </div>
-                <div class="blog-card">
-                  <h2>Some Title</h2>
-                  <div class="blog-card-footer">
-                    <span>
-                      Last Edited 17th December, 2018
-                    </span>
-                    <!-- Dropdown with menu here -->
+                <!-- In case of no drafts blogs  -->
+                <div v-else class="blog-error">
+                  No Drafts :(
+                </div>
+              </template>
+              <template v-else>
+                <div v-if="blogs.published && blogs.published.length" key="1">
+                  <div
+                    v-for="blog in blogs.published"
+                    :key="blog._id"
+                    class="blog-card"
+                  >
+                    <h2>{{ blog.title }}</h2>
+                    <div class="blog-card-footer">
+                      <span>
+                        Last Edited:
+                        <span class="has-grey-text">
+                          {{ blog.updatedAt | date('llll') }}
+                        </span>
+                      </span>
+                      <drop-down
+                        :items="publishedOption"
+                        @optionChanged="handelOption($event, blog._id)"
+                      />
+                    </div>
                   </div>
                 </div>
-              </div>
-              <!-- In case of no drafts blogs  -->
-              <!-- <div class="blog-error">
-                No Drafts :(
-              </div> -->
-            </template>
+                <!-- In case of no drafts blogs  -->
+                <div v-else class="blog-error">
+                  No Drafts :(
+                </div>
+              </template>
+            </transition>
           </div>
         </div>
       </div>
@@ -55,15 +106,79 @@
   </div>
 </template>
 <script>
+import { mapState } from 'vuex'
+import { gsap } from 'gsap'
+import DropDown from '@/components/shared/DropDown'
 import Header from '~/components/shared/Header'
+import {
+  createPublishedOptions,
+  createDraftsOptions,
+  commands
+} from '@/pages/instructor/blogs/options'
 
 export default {
   layout: 'instructor',
-  components: { Header }
+  components: { Header, DropDown },
+  async fetch({ store }) {
+    await store.dispatch('instructor/blog/fetchUserBlogs')
+  },
+  data() {
+    return {
+      blogKey: 0
+    }
+  },
+  computed: {
+    ...mapState({
+      blogs: ({ instructor }) => instructor.blog.items
+    }),
+    publishedOption() {
+      return createPublishedOptions()
+    },
+    draftOptions() {
+      return createDraftsOptions()
+    }
+  },
+  methods: {
+    handelOption(command, blogId) {
+      if (command === commands.EDIT_BLOG) {
+        this.$router.push(`/instructor/blog/${blogId}/edit`)
+      }
+      // if (command === commands.DELETE_BLOG) {}
+    },
+
+    beforeEnter(el) {
+      el.style.opacity = 0
+    },
+    enter(el, done) {
+      gsap.to(el, {
+        duration: 1,
+        opacity: 1,
+
+        ease: ' Back. easeInOut.config(3)',
+        onComplete: done
+      })
+    },
+    beforeLeave(el) {
+      el.style.opacity = 1
+    },
+    leave(el, done) {
+      gsap.to(el, {
+        duration: 1,
+        opacity: 0,
+
+        ease: ' Back. easeInOut.config(3)',
+        onComplete: done
+      })
+    }
+  }
 }
 </script>
 
 <style scoped lang="scss">
+.is-active {
+  border-bottom-color: #505763;
+  color: #363636;
+}
 .blog-error {
   font-size: 35px;
 }
