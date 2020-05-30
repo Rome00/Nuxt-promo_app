@@ -17,8 +17,8 @@ export const mutations = {
   SET_IS_ACTIVE: (state, isActive) => {
     state.isActive = isActive
   },
-  DELETE_BLOG(state, { status, index }) {
-    state.items[status].splice(index, 1)
+  DELETE_BLOG(state, { blogStatus, index }) {
+    state.items[blogStatus].splice(index, 1)
   }
 }
 

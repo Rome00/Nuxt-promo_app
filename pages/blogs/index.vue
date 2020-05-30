@@ -6,33 +6,32 @@
           <!-- posts -->
           <div class="column is-8">
             <!-- blog -->
-            <div class="section">
+            <div v-for="blog in blogs" :key="blog._id" class="section">
               <div class="post">
-                <div class="post-header clickable" @click="() => {}">
-                  <h4 class="title is-4">Some Blog Title</h4>
-                  <h5 class="subtitle is-5">Some Blog Subtitle</h5>
+                <div
+                  class="post-header clickable"
+                  @click="
+                    $router.push({
+                      name: 'blogs-slug',
+                      params: { slug: blog.slug }
+                    })
+                  "
+                >
+                  <h4 class="title is-4">{{ blog.title }}</h4>
+                  <h5 class="subtitle is-5">{{ blog.subtitle }}</h5>
                 </div>
                 <div class="post-content">
-                  by Filip Jerga, Jul 1
-                </div>
-              </div>
-            </div>
-            <div class="section">
-              <div class="post">
-                <div class="post-header clickable" @click="() => {}">
-                  <h4 class="title is-4">Some Blog Title</h4>
-                  <h5 class="subtitle is-5">Some Blog Subtitle</h5>
-                </div>
-                <div class="post-content">
-                  by Filip Jerga, Jul 1
+                  by {{ blog.author.name }}, {{ blog.createdAt | date(ll) }}
                 </div>
               </div>
             </div>
             <!-- end of blog -->
+
             <!-- pagination -->
             <div class="section"></div>
             <!-- end of pagination -->
           </div>
+
           <!-- side bar -->
           <div class="column is-4 is-narrow">
             <!-- featured -->
@@ -59,7 +58,18 @@
 </template>
 
 <script>
-export default {}
+import { mapState } from 'vuex'
+
+export default {
+  async fetch({ store }) {
+    await store.dispatch('blog/fetchBlogs')
+  },
+  computed: {
+    ...mapState({
+      blogs: ({ blog }) => blog.items.all
+    })
+  }
+}
 </script>
 
 <style scoped>
