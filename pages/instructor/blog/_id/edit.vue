@@ -67,10 +67,11 @@
 </template>
 <script>
 import { mapState } from 'vuex'
-import slagify from 'slugify'
-import Editor from '~/components/editor'
-import Header from '~/components/shared/Header'
-import Modal from '~/components/shared/Modal'
+import slugify from 'slugify'
+import Editor from '@/components/editor'
+import Header from '@/components/shared/Header'
+import Modal from '@/components/shared/Modal'
+
 export default {
   layout: 'instructor',
   components: {
@@ -84,7 +85,8 @@ export default {
   data() {
     return {
       publishError: '',
-      slug: ''
+      slug: '',
+      error: true
     }
   },
   computed: {
@@ -123,11 +125,13 @@ export default {
     },
     checkBlogValidity() {
       const title = this.$refs.editor.getNodeValueByName('title')
+      this.error = true
       this.publishError = ''
       this.slug = ''
       if (title && title.length > 15) {
         // create slug from title
         this.slug = this.slugify(title)
+        this.error = false
       } else {
         this.publishError =
           'Cannot publish! Title needs to be longer than 24 characters!'
@@ -137,12 +141,13 @@ export default {
       return process.client && window.location.origin
     },
     slugify(text) {
-      return slagify(text, {
+      return slugify(text, {
         replacement: '-',
         remove: null,
         lower: true
       })
     },
+
     updateBlogStatus({ closeModal }, status) {
       const blogContent = this.$refs.editor.getContent()
       blogContent.status = status
@@ -151,25 +156,32 @@ export default {
         status === 'published'
           ? 'Blog has been successfully published'
           : 'Blog has been successfully unpublished'
-      this.$store
-        .dispatch('instructor/blog/updateBlog', {
-          data: blogContent,
-          id: this.blog._id
-        })
-        .then(_ => {
-          this.$toasted.success(message, {
-            duration: 3000,
-            position: 'bottom-right'
+      if (!this.error) {
+        this.$store
+          .dispatch('instructor/blog/updateBlog', {
+            data: blogContent,
+            id: this.blog._id
           })
-          closeModal()
-        })
-        .catch(_ => {
-          this.$toasted.error('Blog cannot be published', {
-            duration: 3000,
-            position: 'bottom-right'
+          .then(_ => {
+            this.$toasted.success(message, {
+              duration: 3000,
+              position: 'bottom-right'
+            })
+            closeModal()
           })
-          closeModal()
+          .catch(_ => {
+            this.$toasted.error('Blog cannot be published', {
+              duration: 3000,
+              position: 'bottom-right'
+            })
+            closeModal()
+          })
+      } else {
+        this.$toasted.error(this.publishError, {
+          duration: 3000,
+          position: 'bottom-right'
         })
+      }
     }
   }
 }
