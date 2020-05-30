@@ -223,7 +223,6 @@ export default {
   methods: {
     register() {
       this.$v.form.$touch()
-      console.log(this.isValid)
       if (this.isValid) {
         this.$store
           .dispatch('auth/registerUser', this.form)

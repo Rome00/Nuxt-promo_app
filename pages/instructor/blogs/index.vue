@@ -109,7 +109,7 @@
 import { mapState } from 'vuex'
 import { gsap } from 'gsap'
 import DropDown from '@/components/shared/DropDown'
-import Header from '~/components/shared/Header'
+import Header from '@/components/shared/Header'
 import {
   createPublishedOptions,
   createDraftsOptions,
@@ -150,11 +150,20 @@ export default {
     warningMessage(blog) {
       const isConfirm = confirm('Are you sure you want to delete blog ?')
       if (isConfirm) {
-        this.$store.dispatch('instructor/blog/deleteBlog', blog).then(_ =>
-          this.$toasted.success('Blog was successfully deleted!', {
-            duration: 2000
+        this.$store
+          .dispatch('instructor/blog/deleteBlog', blog)
+          .then(_ =>
+            this.$toasted.success('Blog was successfully deleted!', {
+              duration: 2000,
+              position: 'bottom-right'
+            })
+          )
+          .catch(_ => {
+            this.$toasted.error('blog cannot be deleted!', {
+              duration: 2000,
+              position: 'bottom-right'
+            })
           })
-        )
       }
     },
 
