@@ -16,6 +16,9 @@ export const mutations = {
   },
   SET_IS_ACTIVE: (state, isActive) => {
     state.isActive = isActive
+  },
+  DELETE_BLOG(state, { status, index }) {
+    state.items[status].splice(index, 1)
   }
 }
 
@@ -37,6 +40,17 @@ export const actions = {
       commit('SET_BLOGS', { recourses: 'drafts', items: drafts })
       commit('SET_BLOGS', { recourses: 'published', items: published })
     })
+  },
+  deleteBlog({ commit, state }, blog) {
+    const blogStatus = blog.status === 'active' ? 'drafts' : 'published'
+    return this.$axios
+      .$delete(`/api/v1/blogs/${blog._id}`)
+      .then(_ => {
+        const index = state.items[blogStatus].findIndex(b => b._id === blog._id)
+        commit('DELETE_BLOG', { blogStatus, index })
+        return true
+      })
+      .catch(error => Promise.reject(error))
   },
   updateBlog({ commit }, { data, id }) {
     commit('SET_IS_ACTIVE', true)

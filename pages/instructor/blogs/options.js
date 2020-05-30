@@ -18,7 +18,7 @@ const EDIT_BLOG = createOptions('Edit Blog', commands.EDIT_BLOG)
  Published Blogs
  */
 const DELETE_DRAFT = createOptions('Delete Draft', commands.DELETE_BLOG)
-const EDIT_DRAFT = createOptions('Edit Dradt', commands.EDIT_BLOG)
+const EDIT_DRAFT = createOptions('Edit Draft', commands.EDIT_BLOG)
 
 export const createPublishedOptions = () => [EDIT_BLOG, DELETE_BLOG]
 export const createDraftsOptions = () => [EDIT_DRAFT, DELETE_DRAFT]

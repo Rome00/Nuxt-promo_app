@@ -61,7 +61,7 @@
                       </span>
                       <drop-down
                         :items="draftOptions"
-                        @optionChanged="handelOption($event, blog._id)"
+                        @optionChanged="handelOption($event, blog)"
                       />
                     </div>
                   </div>
@@ -88,7 +88,7 @@
                       </span>
                       <drop-down
                         :items="publishedOption"
-                        @optionChanged="handelOption($event, blog._id)"
+                        @optionChanged="handelOption($event, blog)"
                       />
                     </div>
                   </div>
@@ -139,11 +139,23 @@ export default {
     }
   },
   methods: {
-    handelOption(command, blogId) {
+    handelOption(command, blog) {
       if (command === commands.EDIT_BLOG) {
-        this.$router.push(`/instructor/blog/${blogId}/edit`)
+        this.$router.push(`/instructor/blog/${blog._id}/edit`)
       }
-      // if (command === commands.DELETE_BLOG) {}
+      if (command === commands.DELETE_BLOG) {
+        this.warningMessage(blog)
+      }
+    },
+    warningMessage(blog) {
+      const isConfirm = confirm('Are you sure you want to delete blog ?')
+      if (isConfirm) {
+        this.$store.dispatch('instructor/blog/deleteBlog', blog).then(_ =>
+          this.$toasted.success('Blog was successfully deleted!', {
+            duration: 2000
+          })
+        )
+      }
     },
 
     beforeEnter(el) {
