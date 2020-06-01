@@ -85,8 +85,7 @@ export default {
   data() {
     return {
       publishError: '',
-      slug: '',
-      error: true
+      slug: ''
     }
   },
   computed: {
@@ -125,13 +124,11 @@ export default {
     },
     checkBlogValidity() {
       const title = this.$refs.editor.getNodeValueByName('title')
-      this.error = true
       this.publishError = ''
       this.slug = ''
       if (title && title.length > 15) {
         // create slug from title
         this.slug = this.slugify(title)
-        this.error = false
       } else {
         this.publishError =
           'Cannot publish! Title needs to be longer than 24 characters!'
@@ -156,7 +153,7 @@ export default {
         status === 'published'
           ? 'Blog has been successfully published'
           : 'Blog has been successfully unpublished'
-      if (!this.error) {
+      if (this.publishError === '') {
         this.$store
           .dispatch('instructor/blog/updateBlog', {
             data: blogContent,

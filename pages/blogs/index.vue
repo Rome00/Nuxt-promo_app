@@ -21,7 +21,7 @@
                   <h5 class="subtitle is-5">{{ blog.subtitle }}</h5>
                 </div>
                 <div class="post-content">
-                  by {{ blog.author.name }}, {{ blog.createdAt | date(ll) }}
+                  by {{ blog.author.name }}, {{ blog.createdAt | date('ll') }}
                 </div>
               </div>
             </div>
@@ -42,8 +42,15 @@
                 </div>
                 <div class="sidebar-list">
                   <!-- Featured Blogs -->
-                  <p>
-                    <nuxt-link :to="``">Some favorite blog</nuxt-link>
+                  <p v-for="blog in featuredBlogs" :key="blog._id">
+                    <nuxt-link
+                      :to="{
+                        name: 'blogs-slug',
+                        params: { slug: blog.slug }
+                      }"
+                    >
+                      {{ blog.title }}
+                    </nuxt-link>
                   </p>
                   <!-- Featured Blogs -->
                 </div>
@@ -69,7 +76,8 @@ export default {
   },
   computed: {
     ...mapState({
-      blogs: ({ blog }) => blog.items.all
+      blogs: ({ blog }) => blog.items.all,
+      featuredBlogs: ({ blog }) => blog.items.featured
     })
   }
 }
