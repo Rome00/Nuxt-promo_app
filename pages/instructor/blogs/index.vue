@@ -77,6 +77,7 @@
                     v-for="blog in blogs.published"
                     :key="blog._id"
                     class="blog-card"
+                    :class="{ featured: blog.featured }"
                   >
                     <h2>{{ blog.title }}</h2>
                     <div class="blog-card-footer">
@@ -87,7 +88,7 @@
                         </span>
                       </span>
                       <drop-down
-                        :items="publishedOption"
+                        :items="publishedOptions(blog.featured)"
                         @optionChanged="handelOption($event, blog)"
                       />
                     </div>
@@ -131,9 +132,6 @@ export default {
     ...mapState({
       blogs: ({ instructor }) => instructor.blog.items
     }),
-    publishedOption() {
-      return createPublishedOptions()
-    },
     draftOptions() {
       return createDraftsOptions()
     }
@@ -146,6 +144,33 @@ export default {
       if (command === commands.DELETE_BLOG) {
         this.warningMessage(blog)
       }
+      if (command === commands.TOGGLE_FEATURE) {
+        this.updateBlog(blog)
+      }
+    },
+    updateBlog(blog) {
+      const featured = !blog.featured
+      const featureStatus = featured ? 'Featured' : 'Un-Featured'
+      this.$store
+        .dispatch('instructor/blog/updatePublishedBlog', {
+          id: blog._id,
+          data: { featured }
+        })
+        .then(_ => {
+          this.$toasted.success(`Blog has been ${featureStatus}!`, {
+            duration: 2000,
+            position: 'bottom-right'
+          })
+        })
+        .catch(_ => {
+          this.$toasted.error('blog status was not updated!', {
+            duration: 2000,
+            position: 'bottom-right'
+          })
+        })
+    },
+    publishedOptions(isFeatured) {
+      return createPublishedOptions(isFeatured)
     },
     warningMessage(blog) {
       const isConfirm = confirm('Are you sure you want to delete blog ?')
@@ -214,7 +239,7 @@ export default {
     color: rgba(0, 0, 0, 0.54);
   }
   &.featured {
-    border-left: 5px solid #3cc314;
+    border-left: 8px solid #3cc314;
     padding-left: 10px;
     transition: border ease-out 0.2s;
   }

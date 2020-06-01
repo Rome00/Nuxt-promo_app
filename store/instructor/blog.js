@@ -1,3 +1,5 @@
+import Vue from 'vue'
+
 export const state = () => ({
   items: {
     drafts: [],
@@ -14,8 +16,11 @@ export const mutations = {
   SET_BLOGS(state, { recourses, items }) {
     state.items[recourses] = items
   },
-  SET_IS_ACTIVE: (state, isActive) => {
+  SET_IS_ACTIVE(state, isActive) {
     state.isActive = isActive
+  },
+  SET_FEATURE_STATUS(state, { index, blog }) {
+    Vue.set(state.items.published, index, blog)
   },
   DELETE_BLOG(state, { blogStatus, index }) {
     state.items[blogStatus].splice(index, 1)
@@ -40,6 +45,16 @@ export const actions = {
       commit('SET_BLOGS', { recourses: 'drafts', items: drafts })
       commit('SET_BLOGS', { recourses: 'published', items: published })
     })
+  },
+  updatePublishedBlog({ commit, state }, { id, data }) {
+    alert('FEATURING BLOG')
+    return this.$axios
+      .$patch(`/api/v1/blogs/${id}`, data)
+      .then(blog => {
+        const index = state.items.published.findIndex(b => b._id === id)
+        commit('SET_FEATURE_STATUS', { index, blog })
+      })
+      .catch(error => Promise.reject(error))
   },
   deleteBlog({ commit, state }, blog) {
     const blogStatus = blog.status === 'active' ? 'drafts' : 'published'
