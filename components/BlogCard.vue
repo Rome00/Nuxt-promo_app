@@ -4,20 +4,23 @@
       <div class="media">
         <div class="media-content">
           <p class="title is-4">
-            Some Super Title
+            {{ blog.title }}
           </p>
           <p class="subtitle is-6">
-            <i>Some Super Subtitle</i>
+            <i>{{ blog.author.name }}</i>
           </p>
         </div>
       </div>
       <div class="content">
-        Some Description
+        {{ blog.subtitle }}
         <br />
       </div>
     </div>
     <footer class="card-footer">
-      <nuxt-link :to="'#'" class="card-footer-item">
+      <nuxt-link
+        :to="{ name: 'blogs-slug', params: { slug: blog.slug } }"
+        class="card-footer-item"
+      >
         Read More
       </nuxt-link>
     </footer>
@@ -25,7 +28,14 @@
 </template>
 
 <script>
-export default {}
+export default {
+  props: {
+    blog: {
+      type: Object,
+      required: true
+    }
+  }
+}
 </script>
 
 <style lang="scss" scoped>

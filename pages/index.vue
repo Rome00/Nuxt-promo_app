@@ -6,7 +6,7 @@
     <section class="section">
       <div class="container">
         <h1 class="title">Featured Courses</h1>
-        <div class="columns">
+        <div class="columns is-multiline">
           <div
             v-for="course in courses"
             :key="course._id"
@@ -22,11 +22,13 @@
     <section class="section">
       <div class="container">
         <h1 class="title">Featured Articles</h1>
-        <div class="columns">
-          <div class="column is-one-quarter">
-            <!-- CARD-ITEM -->
-            <blog-card />
-            <!-- CARD-ITEM-END -->
+        <div class="columns is-multiline">
+          <div
+            v-for="blog in blogs"
+            :key="blog._id"
+            class="column is-one-quarter"
+          >
+            <blog-card :blog="blog" />
           </div>
         </div>
       </div>
@@ -48,10 +50,14 @@ export default {
   },
   async fetch({ store }) {
     await store.dispatch('course/fetchCourses')
+    await store.dispatch('blog/fetchFeaturedBlogs', {
+      'filter[featured]': true
+    })
   },
   computed: {
     ...mapGetters({
-      courses: 'course/getCourses'
+      courses: 'course/getCourses',
+      blogs: 'blog/featuredBlogs'
     })
   }
 }

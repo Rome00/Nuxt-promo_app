@@ -32,6 +32,7 @@ module.exports = {
     { src: '@/plugins/filter' },
     { src: '@/plugins/vuelidate' },
     { src: '@/plugins/toasted', ssr: false },
+    { src: '@/plugins/paginate.js', ssr: false },
     { src: '@/plugins/integration' }
   ],
   /*
