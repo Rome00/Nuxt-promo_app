@@ -1,16 +1,12 @@
 export const state = () => ({
   courses: []
 })
-export const getters = {
-  getCourses(state) {
-    return state.courses.items
-  }
-}
 
 export const actions = {
-  fetchCourses({ commit }) {
+  fetchCourses({ commit, state }) {
     return this.$axios.$get('/api/v1/products').then(courses => {
       commit('SET_ITEMS', { resource: 'course', items: courses })
+      return state.courses
     })
   }
 }

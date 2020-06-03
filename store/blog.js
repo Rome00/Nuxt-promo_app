@@ -49,6 +49,7 @@ export const actions = {
         const { blogs, count, pageCount } = data
         commit('SET_BLOG', { type: 'all', blogs })
         commit('SET_PAGINATION', { count, pageCount })
+        return state.items
       })
       .catch(err => Promise.reject(err))
   },

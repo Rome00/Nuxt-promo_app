@@ -37,11 +37,10 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapState } from 'vuex'
 import Hero from '@/components/shared/Hero.vue'
 import CourseCard from '@/components/CourseCard.vue'
 import BlogCard from '@/components/BlogCard.vue'
-
 export default {
   components: {
     Hero,
@@ -55,10 +54,13 @@ export default {
     })
   },
   computed: {
-    ...mapGetters({
-      courses: 'course/getCourses',
-      blogs: 'blog/featuredBlogs'
+    ...mapState({
+      courses: state => state.course.courses.items,
+      blogs: state => state.blog.items.featured
     })
+  },
+  created() {
+    console.log(this.courses)
   }
 }
 </script>

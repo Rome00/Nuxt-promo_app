@@ -11,6 +11,57 @@
             Save
           </button>
         </div>
+        <div class="full-page-takeover-header-button">
+          <Modal
+            open-title="Favorite"
+            open-btn-class="button is-primary is-inverted is-medium is-outlined"
+            title="Make Course Hero"
+            @opened="applyCourseValues"
+            @submitted="createCourseHero"
+          >
+            <div>
+              <form>
+                <div class="field">
+                  <label class="label">Hero title</label>
+                  <span class="label-info">Suggested 64 Characters</span>
+                  <div class="control">
+                    <input
+                      v-model="courseHero.title"
+                      class="input is-medium"
+                      type="text"
+                      placeholder="Amazing course discount"
+                    />
+                  </div>
+                </div>
+                <div class="field">
+                  <label class="label">Hero subtitle</label>
+                  <span class="label-info">Suggested 128 Characters</span>
+                  <input
+                    v-model="courseHero.subtitle"
+                    class="input is-medium"
+                    type="text"
+                    placeholder="Get all of the course for 9.99$"
+                  />
+                </div>
+                <div class="field">
+                  <label class="label">Course image</label>
+                  <span class="label-info">
+                    Image in format 3 by 1 (720 x 240)
+                  </span>
+                  <input
+                    v-model="courseHero.image"
+                    class="input is-medium"
+                    type="text"
+                    placeholder="Some image in format 3 by 1 (720 x 240)"
+                  />
+                  <figure class="image is-3by1">
+                    <img :src="courseHero.image" />
+                  </figure>
+                </div>
+              </form>
+            </div>
+          </Modal>
+        </div>
       </template>
     </Header>
     <div class="course-manage">
@@ -92,10 +143,11 @@ import TargetStudents from '@/components/instructor/TargetStudents'
 import Status from '@/components/instructor/Status'
 import Price from '@/components/instructor/Price'
 import MultiMixin from '@/mixins/MultiComponent'
+import Modal from '@/components/shared/Modal'
 
 export default {
   layout: 'instructor',
-  components: { Header, LandingPage, TargetStudents, Status, Price },
+  components: { Header, LandingPage, TargetStudents, Status, Price, Modal },
   mixins: [MultiMixin],
   async fetch({ store, params }) {
     await store.dispatch('instructor/courses/fetchCourseById', params.id)
@@ -103,7 +155,8 @@ export default {
   },
   data() {
     return {
-      steps: ['TargetStudents', 'LandingPage', 'Price', 'Status']
+      steps: ['TargetStudents', 'LandingPage', 'Price', 'Status'],
+      courseHero: {}
     }
   },
   computed: {
@@ -130,6 +183,19 @@ export default {
         .catch(_ => {
           this.$toasted.error('course cannot be updated', { duration: 3000 })
         })
+    },
+    applyCourseValues() {
+      this.$set(this.courseHero, 'title', this.course.title)
+      this.$set(this.courseHero, 'subtitle', this.course.subtitle)
+      this.$set(this.courseHero, 'image', this.course.image)
+    },
+    createCourseHero({ closeModal }) {
+      const heroData = { ...this.courseHero }
+      heroData.product = { ...this.course }
+      this.$store.dispatch('courseHero/createHero', heroData).then(() => {
+        closeModal()
+        this.$toasted.success('Course Hero was created!', { duration: 3000 })
+      })
     }
   }
 }
