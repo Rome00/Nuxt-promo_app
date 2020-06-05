@@ -1,7 +1,12 @@
 <template>
   <div>
     <!-- Hero Sectio -->
-    <hero />
+    <hero
+      :title="hero.title"
+      :subtitle="hero.subtitle"
+      :image="hero.image"
+      :link="hero.product && hero.product.productLink"
+    />
     <!-- Hero Sectio -->
     <section class="section">
       <div class="container">
@@ -56,11 +61,9 @@ export default {
   computed: {
     ...mapState({
       courses: state => state.course.courses.items,
-      blogs: state => state.blog.items.featured
+      blogs: state => state.blog.items.featured,
+      hero: state => state.courseHero.item
     })
-  },
-  created() {
-    console.log(this.courses)
   }
 }
 </script>

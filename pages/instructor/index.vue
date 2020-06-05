@@ -22,7 +22,7 @@
           </div>
         </div>
         <!-- Go to /instructor/heroes -->
-        <div class="box" @click="() => {}">
+        <div class="box" @click="$router.push({ name: 'instructor-hero' })">
           <div>
             Heroes
           </div>

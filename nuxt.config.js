@@ -46,7 +46,7 @@ module.exports = {
   /*
    ** Nuxt.js modules
    */
-  modules: ['@nuxtjs/axios'],
+  modules: ['@nuxtjs/axios', 'portal-vue/nuxt'],
   /*
    ** Build configuration
    */

@@ -4,5 +4,6 @@ export const actions = {
       // eslint-disable-next-line no-console
       console.log('not auth')
     })
+    await dispatch('courseHero/fetchCourseHero').catch(() => {})
   }
 }
