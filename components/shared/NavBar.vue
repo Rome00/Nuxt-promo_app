@@ -12,7 +12,8 @@
         aria-label="menu"
         aria-expanded="false"
         data-target="navbarBasicExample"
-        @click="() => {}"
+        :class="{ 'is-active': isActive }"
+        @click="isActive = !isActive"
       >
         <span aria-hidden="true"></span>
         <span aria-hidden="true"></span>
@@ -21,13 +22,19 @@
     </div>
 
     <!-- Adds active class -->
-    <div id="navbarBasicExample" class="navbar-menu">
+    <div
+      id="navbarBasicExample"
+      class="navbar-menu"
+      :class="{ 'is-active': isActive }"
+    >
       <div class="navbar-start">
-        <nuxt-link :to="{ name: 'index' }" class="navbar-item">Home</nuxt-link>
-        <nuxt-link to="#" class="navbar-item">Courses</nuxt-link>
-        <nuxt-link :to="{ name: 'blogs' }" class="navbar-item">Blogs</nuxt-link>
-        <nuxt-link to="#" class="navbar-item">About</nuxt-link>
-        <nuxt-link to="#" class="navbar-item">Cv</nuxt-link>
+        <nav-bar :route="{ name: 'index' }" class="navbar-item">Home</nav-bar>
+        <nav-bar :route="{ name: 'courses' }" class="navbar-item">
+          Courses
+        </nav-bar>
+        <nav-bar :route="{ name: 'blogs' }" class="navbar-item">Blogs</nav-bar>
+        <nav-bar :route="{ name: 'about' }" class="navbar-item">About</nav-bar>
+        <nav-bar :route="{ name: 'cv' }" class="navbar-item">Cv</nav-bar>
       </div>
 
       <div class="navbar-end">
@@ -68,8 +75,17 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import NavBar from '@/components/shared/NavLink'
 
 export default {
+  components: {
+    NavBar
+  },
+  data() {
+    return {
+      isActive: false
+    }
+  },
   computed: {
     ...mapGetters({
       user: 'auth/authUser',
@@ -97,5 +113,17 @@ export default {
 }
 .avatar {
   margin-right: 5px;
+}
+.navbar-item {
+  outline: none;
+}
+button {
+  outline: 0;
+  &:focus {
+    outline: 0;
+  }
+  &:active {
+    outline: 0;
+  }
 }
 </style>
