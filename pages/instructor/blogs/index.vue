@@ -197,7 +197,7 @@ export default {
     },
     enter(el, done) {
       gsap.to(el, {
-        duration: 1,
+        duration: 0.5,
         opacity: 1,
 
         ease: ' Back. easeInOut.config(3)',
@@ -209,7 +209,7 @@ export default {
     },
     leave(el, done) {
       gsap.to(el, {
-        duration: 1,
+        duration: 0.5,
         opacity: 0,
 
         ease: ' Back. easeInOut.config(3)',
