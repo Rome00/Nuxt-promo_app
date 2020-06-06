@@ -1,5 +1,6 @@
 export const state = () => ({
-  courses: []
+  courses: [],
+  item: null
 })
 
 export const actions = {
@@ -8,11 +9,20 @@ export const actions = {
       commit('SET_ITEMS', { resource: 'course', items: courses })
       return state.courses
     })
+  },
+  fetchCourseBySlug({ commit, state }, slug) {
+    return this.$axios.$get(`/api/v1/products/s/${slug}`).then(course => {
+      commit('SET_ITEMS_BY_SLUG', course)
+      return state.course
+    })
   }
 }
 
 export const mutations = {
   SET_ITEMS(state, course) {
     state.courses = course
+  },
+  SET_ITEMS_BY_SLUG(state, course) {
+    state.item = course
   }
 }
