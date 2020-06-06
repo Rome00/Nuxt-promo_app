@@ -9,7 +9,7 @@
       <div class="media">
         <div class="media-content">
           <p class="title is-4">
-            {{ course.title | shorten(50) }}
+            {{ course.title | shorten(30) }}
           </p>
           <p class="subtitle is-6">
             <i>by {{ course.author.name }}</i>
@@ -17,7 +17,7 @@
         </div>
       </div>
       <div class="content">
-        {{ course.description | shorten(100) }}
+        {{ course.subtitle | shorten(50) }}
         <br />
       </div>
       <div class="price-box">
@@ -26,7 +26,10 @@
       </div>
     </div>
     <footer class="card-footer">
-      <nuxt-link :to="''" class="card-footer-item">
+      <nuxt-link
+        :to="{ name: 'courses-slug', params: { slug: course.slug } }"
+        class="card-footer-item"
+      >
         Learn More
       </nuxt-link>
       <a target="_" :href="course.productLink" class="card-footer-item">
