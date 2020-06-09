@@ -32,13 +32,6 @@
         <div class="field">
           <label class="label">Course description</label>
           <div class="control">
-            <!--  <textarea
-              class="textarea is-medium"
-              type="text"
-              placeholder="Write something catchy about the course"
-              :value="course.description"
-              @input="$event => emitCourseValue($event, 'description')"
-            ></textarea> -->
             <course-editor
               :init-content="course.description"
               @editorContent="

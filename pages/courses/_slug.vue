@@ -59,6 +59,18 @@ export default {
     course() {
       return this.$store.state.course.item
     }
+  },
+  head() {
+    return {
+      tite: this.course.title,
+      meta: [
+        {
+          hid: 'description',
+          name: 'descritpion',
+          content: this.course.subtitle
+        }
+      ]
+    }
   }
 }
 </script>

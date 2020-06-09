@@ -37,6 +37,14 @@ export default {
     ...mapState({
       blog: ({ blog }) => blog.item
     })
+  },
+  head() {
+    return {
+      tite: this.blog.title,
+      meta: [
+        { hid: 'description', name: 'descritpion', content: this.blog.subtitle }
+      ]
+    }
   }
 }
 </script>

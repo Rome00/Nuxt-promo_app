@@ -130,6 +130,9 @@ export default {
         .dispatch('blog/fetchBlogs', filter)
         .then(_ => this.setQueryPaginationParams())
     }
+  },
+  head: {
+    title: 'Read Amazing blogs | Romeo Khazalia'
   }
 }
 </script>

@@ -18,7 +18,16 @@
             class="column is-one-quarter"
           >
             <!-- CARD-ITEM -->
-            <course-card :course="course" />
+            <v-popover offset="16" trigger="hover" placement="right-start">
+              <course-card :course="course" />
+              <tool-tip
+                slot="popover"
+                :title="course.title"
+                :subtitle="course.category.name"
+                :description="course.subtitle"
+                :wsl="course.wsl"
+              />
+            </v-popover>
             <!-- CARD-ITEM-END -->
           </div>
         </div>
@@ -46,11 +55,14 @@ import { mapState } from 'vuex'
 import Hero from '@/components/shared/Hero.vue'
 import CourseCard from '@/components/CourseCard.vue'
 import BlogCard from '@/components/BlogCard.vue'
+import ToolTip from '@/components/ToolTip.vue'
+
 export default {
   components: {
     Hero,
     BlogCard,
-    CourseCard
+    CourseCard,
+    ToolTip
   },
   async fetch({ store }) {
     await store.dispatch('course/fetchCourses')
@@ -64,6 +76,9 @@ export default {
       blogs: state => state.blog.items.featured,
       hero: state => state.courseHero.item
     })
+  },
+  head: {
+    title: 'Online Courses and Blogs | Romeo Khazalia'
   }
 }
 </script>
