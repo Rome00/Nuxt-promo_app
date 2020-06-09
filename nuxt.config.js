@@ -15,7 +15,7 @@ module.exports = {
       },
       { hid: 'og:title', name: 'og:title', content: 'learn from courses ' },
       { hid: 'og:locale', name: 'og:locale', content: 'ka_ge' },
-      { hid: 'og:url', name: 'og:url', content: process.env.BABEL_URL },
+      { hid: 'og:url', name: 'og:url', content: process.env.BASE_URL },
       { hid: 'og:type', name: 'og:type', content: 'website' },
       {
         hid: 'og:image',
