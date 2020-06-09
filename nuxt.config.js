@@ -63,6 +63,9 @@ module.exports = {
    ** Nuxt.js modules
    */
   modules: ['@nuxtjs/axios', 'portal-vue/nuxt'],
+  axios:{
+    baseURL: process.env.BABEL_URL || 'https/localhost:3000'
+  }
   /*
    ** Build configuration
    */
