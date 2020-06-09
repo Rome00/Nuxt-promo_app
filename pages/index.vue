@@ -74,7 +74,7 @@ export default {
     ...mapState({
       courses: state => state.course.courses.items,
       blogs: state => state.blog.items.featured,
-      hero: state => state.courseHero.item
+      hero: state => state.courseHero.item || {}
     })
   },
   head: {

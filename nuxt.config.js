@@ -58,14 +58,12 @@ module.exports = {
     // Doc: https://github.com/nuxt-community/eslint-module
     '@nuxtjs/eslint-module'
   ],
-  serverMiddleware: ['~/server/routes/index'],
-  /*
-   ** Nuxt.js modules
-   */
   modules: ['@nuxtjs/axios', 'portal-vue/nuxt'],
+
   axios: {
-    baseURL: process.env.BABEL_URL || 'https/localhost:3000'
+    baseURL: process.env.BASE_URL || 'http://localhost:3000'
   },
+  serverMiddleware: ['~/server/routes/index'],
   /*
    ** Build configuration
    */
