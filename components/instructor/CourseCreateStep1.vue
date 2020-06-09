@@ -11,7 +11,7 @@
         <div class="field course-create-form-field control has-icons-right">
           <input
             v-model="form.title"
-            :maxLength="50"
+            :maxLength="maxLength"
             type="text"
             placeholder="e.g. Amazing Course in Flutter!"
             class="input is-large"
@@ -39,7 +39,7 @@ export default {
       form: {
         title: ''
       },
-      maxLength: 50
+      maxLength: 70
     }
   },
   validations: {
