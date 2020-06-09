@@ -64,9 +64,7 @@ module.exports = {
     baseURL: process.env.BASE_URL || 'http://localhost:3000'
   },
   serverMiddleware: ['~/server/routes/index'],
-  /*
-   ** Build configuration
-   */
+
   build: {
     /*
      ** You can extend webpack config here
