@@ -7,23 +7,50 @@
       <p>
         My name is Romeo Khazalia and I am an Front-End and freelance developer.
       </p>
-      <br />
-      <div>
-        I am a Front End developer with experience building websites and web
-        applications. I specialize in Front-end tools:
-        <ul>
-          <li>JavaScript, Vue.js.</li>
-          <li>HTML5, Css3, Sass</li>
-          <li>Bootstrap, Bulma</li>
-          <li>Vuetyfy, Buefy.</li>
-        </ul>
+      <div class="is-mt-1">
+        <p class="has-text-justified">
+          I graduated from Tbilisi and Ilia State University, Faculty of Exact
+          and Natural Sciences. With a master’s degree in geoinformation system.
+          Later I became interested in web development and extended my studies
+          at the Academy of Information Technology as a frontend developer.
+          <br />
+          I am currently inspired in Vue.js Library and I'm continually striving
+          to advance my knowledge in this regard, I desire to work on projects
+          where I will have the possibility to use it and to expand my working
+          experience even more.
+        </p>
+        <br />
+        <div class="is-mt-1">
+          <h3 class="is-size-2">
+            Front-end tools I use:
+          </h3>
+          <div
+            class="breadcrumb has-bullet-separator is-medium"
+            aria-label="breadcrumbs"
+          >
+            <ul>
+              <li>
+                <div class="has-deep-orange-text text-darken-2">HTML5</div>
+              </li>
+              <li><div class="has-light-blue-text text-darken-1">Css3</div></li>
+              <li>
+                <div class="has-amber-text text-lighten-1">JavaScript</div>
+              </li>
+              <li><div class="has-green-text text-accent-5">Vue.js</div></li>
+              <li><div class="has-green-text text-accent-5">Nuxt.js</div></li>
+              <li><div class="has-pink-text text-accent-2">Scss</div></li>
+              <li><div class="has-teal-text text-accent-3">Bulma</div></li>
+              <li>
+                <div class="has-deep-purple-text text-lighten-1">Bootstrap</div>
+              </li>
+              <li>
+                <div class="has-deep-purple-text text-lighten-1">Buefy</div>
+              </li>
+              <li><div class="has-blue-text text-darken-3">Vuetify</div></li>
+            </ul>
+          </div>
+        </div>
       </div>
-      <br />
-      <p>
-        Throughout my career, I have acquired technical knowledge and the
-        ability to explain programming topics clearly and in detail to a broad
-        audience.
-      </p>
     </div>
   </div>
 </template>
@@ -58,9 +85,15 @@ export default {
     0 0 0 1px rgba(10, 10, 10, 0.1);
   box-shadow: 0 2px 3px rgba(10, 10, 10, 0.1), 0 0 0 1px rgba(10, 10, 10, 0.1);
 }
-ul {
-  margin-left: 60px;
-  display: list-item;
-  list-style: circle;
+.breadcrumb li:first-child div {
+  padding-left: 0;
+}
+.breadcrumb div {
+  align-items: center;
+  color: #4bacff;
+  display: flex;
+  justify-content: center;
+  padding: 0 0.75em;
+  font-weight: 500;
 }
 </style>
