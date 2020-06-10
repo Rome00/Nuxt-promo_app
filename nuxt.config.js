@@ -29,8 +29,7 @@ module.exports = {
         content: 'My name is Romeo Khazalia and I am a Front End developer'
       }
     ],
-    link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
-    script: [{ src: 'https://kit.fontawesome.com/f43178f547.js' }]
+    link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }]
   },
   /*
    ** Customize the progress-bar color
@@ -39,7 +38,7 @@ module.exports = {
   /*
    ** Global CSS
    */
-  css: ['@/assets/Scss/main.scss'],
+  css: ['@/assets/Scss/main.scss', '@/assets/Css/icons.css'],
   /*
    ** Plugins to load before mounting the App
    */
