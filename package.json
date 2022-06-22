@@ -14,7 +14,7 @@
   },
   "dependencies": {
     "@nuxtjs/axios": "^5.3.6",
-    "async": "^3.0.1",
+    "async": "^3.2.2",
     "async-lock": "^1.2.0",
     "axios": "^0.19.2",
     "bcrypt": "^3.0.6",
